@@ -1,45 +1,26 @@
-# import socket
-
-# client = socket.socket()
-# client.connect(("localhost",1234))
-# name = input("enter name = ")
-
-# while True:
-#     msg = input("enter message = ")
-#     client.send(name)
-#     server_msg = client.recv(1024).decode()
-#     print(server_msg)
-#     client.send(msg)
-#     client.close()
-# import socket
-
-# client = socket.socket()
-# client.connect(("localhost", 1234))
-# name = input("Enter name: ")
-
-# print("Connected to server")
-
-# while True:
-#     msg = input("Enter message: ")
-#     client.send(name.encode())
-#     server_msg = client.recv(1024).decode()
-#     print(server_msg)
-#     client.send(msg.encode())
-#     client.close()
 import socket
 
 client = socket.socket()
 client.connect(("localhost", 1234))
 name = input("Enter name: ")
 
-print("Connected to server")
-
-# Send the name to the server
+# Send the name encoded as bytes
 client.send(name.encode())
 
+# Receive and print the welcome message from the server
+server_msg = client.recv(1024).decode()
+print(f"Server: {server_msg}")
+
+# Keep the connection open to send and receive messages
 while True:
     msg = input("Enter message: ")
+    if msg.lower() == 'exit':
+        print("Closing connection...")
+        client.close()
+        break
+    
     client.send(msg.encode())
+
+    # Receive the server's response
     server_msg = client.recv(1024).decode()
-    print(server_msg)
-    client.close()
+    print(f"Server: {server_msg}")
